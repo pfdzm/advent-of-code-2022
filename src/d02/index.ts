@@ -53,7 +53,7 @@ const main = async (filename: string): Promise<void> => {
 
     const winner = rps(oppInput, youInput);
     if (winner === 2) {
-      return you + opp;
+      return you + 3;
     }
 
     if (winner === 1) {
