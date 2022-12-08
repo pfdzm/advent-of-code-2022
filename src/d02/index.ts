@@ -30,6 +30,7 @@ const rps = (p1: "A" | "B" | "C", p2: "X" | "Y" | "Z") => {
       return 1;
   }
 };
+
 const main = async (filename: string): Promise<void> => {
   const input = (
     await readFile(path.resolve("src", "d02", filename), "utf-8")
@@ -69,5 +70,56 @@ const main = async (filename: string): Promise<void> => {
   console.log(score);
 };
 
-main("example.txt");
-main("input.txt");
+await main("example.txt");
+await main("input.txt");
+
+// part 2
+const rules = {
+  A: {
+    X: 3, // lose
+    Y: 1, // draw
+    Z: 2, // win
+  },
+  B: {
+    X: 1,
+    Y: 2,
+    Z: 3,
+  },
+  C: {
+    X: 2,
+    Y: 3,
+    Z: 1,
+  },
+};
+
+const part2 = async (filename: string): Promise<void> => {
+  console.log("\npart 2\n");
+  const input = (
+    await readFile(path.resolve("src", "d02", filename), "utf-8")
+  ).split("\n");
+
+  const rounds = input.map((round) => {
+    const oppInput = round.split(" ")[0];
+    if (oppInput !== "A" && oppInput !== "B" && oppInput !== "C") {
+      throw new Error("unexpected");
+    }
+    const youInput = round.split(" ")[1];
+    if (youInput !== "X" && youInput !== "Y" && youInput !== "Z") {
+      throw new Error("unexpected");
+    }
+    const you = rules[oppInput][youInput];
+    if (youInput === "X") {
+      return you;
+    }
+    if (youInput === "Y") {
+      return you + 3;
+    }
+    return you + 6;
+  });
+
+  const score = rounds.reduce((prev, curr) => prev + curr, 0);
+  console.log(score);
+};
+
+await part2("example.txt");
+await part2("input.txt");
